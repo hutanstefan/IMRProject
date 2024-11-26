@@ -7,8 +7,8 @@ public class FlickerAndGrow : MonoBehaviour
     public float maxIntensity = 2f;            
     public float sizeGrowthRate = 0.1f;        
     public float maxParticleSize = 5f;          
-    public float areaGrowthRate = 0.05f;       
-    public float maxAreaSize = 3f;            
+    public float areaGrowthRate = 0.05f;   
+    public float maxX, maxY;
 
     private ParticleSystem fireParticles;       
     private ParticleSystem.MainModule mainModule;
@@ -21,6 +21,8 @@ public class FlickerAndGrow : MonoBehaviour
         {
             mainModule = fireParticles.main;
             shapeModule = fireParticles.shape;
+            maxX=shapeModule.scale.x*2;
+            maxY=shapeModule.scale.y*2;
         }
         else
         {
@@ -40,11 +42,11 @@ public class FlickerAndGrow : MonoBehaviour
             mainModule.startSize = new ParticleSystem.MinMaxCurve(mainModule.startSize.constant + sizeGrowthRate * Time.deltaTime);
         }
 
-        if (fireParticles != null && shapeModule.scale.x < maxAreaSize)
+        if (fireParticles != null && (shapeModule.scale.x < maxX || shapeModule.scale.y< maxY))
         {
-            float newScale = shapeModule.scale.x + areaGrowthRate * Time.deltaTime;
-            float newScaleY = shapeModule.scale.y + areaGrowthRate * Time.deltaTime;
-            shapeModule.scale = new Vector3(newScale, newScaleY, newScale);
+           float newScaleX = Mathf.Min(shapeModule.scale.x + areaGrowthRate * Time.deltaTime, maxX);
+           float newScaleY = Mathf.Min(shapeModule.scale.y + areaGrowthRate * Time.deltaTime, maxY);
+           shapeModule.scale = new Vector3(newScaleX, newScaleY, shapeModule.scale.z);
         }
     }
 }
