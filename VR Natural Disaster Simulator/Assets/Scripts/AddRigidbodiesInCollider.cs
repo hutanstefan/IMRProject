@@ -7,10 +7,12 @@ public class AddRigidbodiesInCollider : MonoBehaviour
     public Collider areaCollider; // Colliderul care definește zona
     public float densityFactor = 1f; // Factorul de densitate pentru calculul masei
     public float staticVolumeThreshold = 10f; // Pragul de volum pentru a marca obiectele ca statice
+    public float minimumMass = 1f;
     private bool hasBeenApplied = false;
 
     // Lista cuvintele cheie pentru obiectele statice
-    public string[] staticKeywords = { "counter", "cabinet", "drawer", "building", "wall", "floor", "ceiling", "pillar", "door", "window", "roof" };
+    private string[] staticKeywords = { "counter", "cabinet", "drawer", "building", "wall", "floor", "ceiling", "pillar", "door", "window", "roof" };
+    private string[] separators = {"_", ",", ".", "-", " "};
 
     void Update()
     {
@@ -42,6 +44,8 @@ public class AddRigidbodiesInCollider : MonoBehaviour
 
                 // Calculează masa
                 float mass = CalculateMass(obj);
+                if(mass < 1)
+                    mass = minimumMass;
                 rb.mass = mass;
 
                 // Verifică dacă obiectul are un MeshCollider non-convex
@@ -81,12 +85,18 @@ public class AddRigidbodiesInCollider : MonoBehaviour
         // Convertim numele obiectului la litere mici pentru a face verificarea case-insensitive
         string lowerName = obj.name.ToLower();
 
-        foreach (string keyword in staticKeywords)
+        // Separăm numele în cuvinte folosind separatorii
+        string[] words = lowerName.Split(separators, System.StringSplitOptions.RemoveEmptyEntries);
+
+        foreach (string word in words)
         {
-            // Verificăm dacă numele obiectului începe sau se potrivește exact cu un cuvânt cheie
-            if (lowerName.Contains(keyword) || lowerName.StartsWith(keyword.ToLower()))
+            foreach (string keyword in staticKeywords)
             {
-                return true;
+                // Verificăm dacă cuvântul conține sau este exact egal cu un cuvânt cheie
+                if (word.Contains(keyword) || word == keyword)
+                {
+                    return true;
+                }
             }
         }
 
