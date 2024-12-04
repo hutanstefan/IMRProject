@@ -4,15 +4,15 @@ using System.Collections.Generic;
 public class FireManager : MonoBehaviour
 {
     public string flammableTag = "Inflamable";
-    public GameObject fireEffectPrefab;       // Prefab-ul pentru efectul de foc
-    public float spreadRadius = 15f;           // Raza de extindere a focului
+    public GameObject fireEffectPrefab;       
+    public float spreadRadius = 2f;           
     public float baseIntensity = 1f;         
     public float extraIntensity = 1f;        
     public float initialIgnitionDelay = 5f;   
-    private float spreadCooldown = 30f; 
+    private float spreadCooldown = 15f; 
     private float lastSpreadTime = 0f;
 
-    private List<InflamableObject> burningObjects = new List<InflamableObject>(); // Obiecte care ard
+    private List<InflamableObject> burningObjects = new List<InflamableObject>(); 
 
     void Start()
     {
@@ -52,7 +52,8 @@ public class FireManager : MonoBehaviour
 
 void SpreadFire()
 {
-    if (Time.time - lastSpreadTime < spreadCooldown) return; 
+    if (Time.time - lastSpreadTime < spreadCooldown) 
+        return; 
     lastSpreadTime = Time.time;
     List<GameObject> newBurningObjects = new List<GameObject>();
 
