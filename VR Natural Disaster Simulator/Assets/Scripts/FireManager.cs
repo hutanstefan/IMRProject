@@ -108,19 +108,20 @@ void SpreadFire()
 
 
 void CreateFireEffect(Vector3 position, float intensity, Vector3 objectSize)
-    {
-        GameObject fireEffect = Instantiate(fireEffectPrefab, position-objectSize/2, Quaternion.identity);
-        fireEffect.transform.localScale = objectSize;
+{
+    GameObject fireEffect = Instantiate(fireEffectPrefab, position, Quaternion.identity);
 
+    ParticleSystem fireParticleSystem = fireEffect.GetComponent<ParticleSystem>();
+    ParticleSystem.MainModule main = fireParticleSystem.main;
+    ParticleSystem.ShapeModule shape = fireParticleSystem.shape;
 
-        ParticleSystem fireParticleSystem = fireEffect.GetComponent<ParticleSystem>();
-        ParticleSystem.ShapeModule shape = fireParticleSystem.shape;
-        shape.radius = intensity * 2f;  
+    // Adjust the start size and lifetime based on the intensity and object size
+    main.startSize = Mathf.Max(0.2f, Mathf.Min(objectSize.y, 2 * objectSize.x));
+    main.startLifetime = Mathf.Lerp(1f, 2f, intensity / 10f);
 
-        var main = fireParticleSystem.main;
-        main.startLifetime = Mathf.Lerp(1f, 2f, intensity / 10f); 
-        main.startSize = Mathf.Max(0.2f, Mathf.Min(objectSize.y, 2 * objectSize.x));
-    
-        fireParticleSystem.Play();
-    }
+    // Ensure the fire effect always faces upwards
+    fireEffect.transform.rotation = Quaternion.Euler(-90, 0, 0);
+
+    fireParticleSystem.Play();
+}
 }
