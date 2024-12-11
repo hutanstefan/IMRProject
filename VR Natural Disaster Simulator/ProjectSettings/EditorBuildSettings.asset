@@ -4,5 +4,10 @@
 EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
-  m_Scenes: []
-  m_configObjects: {}
+  m_Scenes:
+  - enabled: 1
+    path: Assets/Scenes/FireScene.unity
+    guid: 296d435058549044da015881ba5e1435
+  m_configObjects:
+    com.unity.xr.management.loader_settings: {fileID: 11400000, guid: 877f58d7ec6aa314caa57fe751a07092, type: 2}
+    com.unity.xr.openxr.settings4: {fileID: 11400000, guid: fea292051feb521479e79c1f76927839, type: 2}
