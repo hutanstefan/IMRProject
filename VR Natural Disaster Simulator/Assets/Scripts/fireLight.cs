@@ -2,17 +2,17 @@ using UnityEngine;
 
 public class FlickerAndGrow : MonoBehaviour
 {
-    public Light fireLight;                    
-    public float minIntensity = 1.5f;           
-    public float maxIntensity = 2f;            
-    public float sizeGrowthRate = 0.1f;        
-    public float maxParticleSize = 5f;          
-    public float areaGrowthRate = 0.05f;   
-    public float maxX, maxY;
+    public Light fireLight;                     
+    public float minIntensity = 1.5f;            
+    public float maxIntensity = 2f;             
+    public float sizeGrowthRate = 0.01f;        
+    public float maxParticleSizeMultiplier = 1.01f; 
+    public float areaGrowthRate = 0.05f;        
 
     private ParticleSystem fireParticles;       
     private ParticleSystem.MainModule mainModule;
     private ParticleSystem.ShapeModule shapeModule;
+    private Vector3 initialShapeScale;
 
     void Start()
     {
@@ -21,8 +21,7 @@ public class FlickerAndGrow : MonoBehaviour
         {
             mainModule = fireParticles.main;
             shapeModule = fireParticles.shape;
-            maxX=shapeModule.scale.x*2;
-            maxY=shapeModule.scale.y*2;
+            initialShapeScale = shapeModule.scale;
         }
         else
         {
@@ -37,16 +36,13 @@ public class FlickerAndGrow : MonoBehaviour
             fireLight.intensity = Random.Range(minIntensity, maxIntensity);
         }
 
-        if (fireParticles != null && mainModule.startSize.constant < maxParticleSize)
+        if (fireParticles != null)
         {
-            mainModule.startSize = new ParticleSystem.MinMaxCurve(mainModule.startSize.constant + sizeGrowthRate * Time.deltaTime);
-        }
-
-        if (fireParticles != null && (shapeModule.scale.x < maxX || shapeModule.scale.y< maxY))
-        {
-           float newScaleX = Mathf.Min(shapeModule.scale.x + areaGrowthRate * Time.deltaTime, maxX);
-           float newScaleY = Mathf.Min(shapeModule.scale.y + areaGrowthRate * Time.deltaTime, maxY);
-           shapeModule.scale = new Vector3(newScaleX, newScaleY, shapeModule.scale.z);
+            Vector3 maxScale = initialShapeScale * maxParticleSizeMultiplier;
+            float newScaleX = Mathf.Min(shapeModule.scale.x + areaGrowthRate * Time.deltaTime, maxScale.x);
+            float newScaleY = Mathf.Min(shapeModule.scale.y + areaGrowthRate * Time.deltaTime, maxScale.y);
+            float newScaleZ = Mathf.Min(shapeModule.scale.z + areaGrowthRate * Time.deltaTime, maxScale.z);
+            shapeModule.scale = new Vector3(newScaleX, newScaleY, newScaleZ);
         }
     }
 }

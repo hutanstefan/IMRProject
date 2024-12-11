@@ -5,11 +5,11 @@ public class FireManager : MonoBehaviour
 {
     public string flammableTag = "Inflamable";
     public GameObject fireEffectPrefab;       
-    public float spreadRadius = 2f;           
+    public float spreadRadius = 1f;           
     public float baseIntensity = 1f;         
     public float extraIntensity = 1f;        
     public float initialIgnitionDelay = 5f;   
-    private float spreadCooldown = 15f; 
+    private float spreadCooldown = 40f; 
     private float lastSpreadTime = 0f;
 
     private List<InflamableObject> burningObjects = new List<InflamableObject>(); 
@@ -37,7 +37,8 @@ public class FireManager : MonoBehaviour
             {
                 inflamableComponent.Ignite(baseIntensity,3f);
                 burningObjects.Add(inflamableComponent);
-                CreateFireEffect(inflamableComponent.transform.position, baseIntensity);
+                CreateFireEffect(inflamableComponent.transform.position, baseIntensity, inflamableComponent.GetComponent<Renderer>().bounds.size);
+                Debug.Log($"{randomObject.name} a început să ardă! Are dimensiunea:{inflamableComponent.GetComponent<Renderer>().bounds.size} Intensitatea focului: {baseIntensity}");
             }
             else
             {
@@ -49,6 +50,7 @@ public class FireManager : MonoBehaviour
             Debug.LogError("Nu au fost găsite obiecte cu tag-ul Inflamable.");
         }
     }
+
 
 void SpreadFire()
 {
@@ -67,7 +69,7 @@ void SpreadFire()
             {
                 InflamableObject nearbyInflamable = collider.GetComponent<InflamableObject>();
 
-                if (nearbyInflamable != null && !nearbyInflamable.isBurning)
+                if (nearbyInflamable != null && !nearbyInflamable.isBurning && !burningObjects.Contains(nearbyInflamable))
                 {
                     float intensity = baseIntensity;
                     float burnRate = 1f;
@@ -86,9 +88,9 @@ void SpreadFire()
                     nearbyInflamable.Ignite(intensity, burnRate);
                     newBurningObjects.Add(nearbyInflamable.gameObject);  
 
-                    CreateFireEffect(nearbyInflamable.transform.position, intensity);
+                    CreateFireEffect(nearbyInflamable.transform.position, intensity, nearbyInflamable.GetComponent<Renderer>().bounds.size);
 
-                    Debug.Log($"Obiect {nearbyInflamable.name} ars cu burnRate {burnRate} și intensitate {intensity}");
+                    //Debug.Log($"Obiect {nearbyInflamable.name} arde cu burnRate {burnRate} și intensitate {intensity}");
                 }
             }
         }
@@ -105,20 +107,20 @@ void SpreadFire()
 }
 
 
-    // Funcția pentru crearea efectului de foc
-    void CreateFireEffect(Vector3 position, float intensity)
+void CreateFireEffect(Vector3 position, float intensity, Vector3 objectSize)
     {
-        GameObject fireEffect = Instantiate(fireEffectPrefab, position, Quaternion.identity);
+        GameObject fireEffect = Instantiate(fireEffectPrefab, position-objectSize/2, Quaternion.identity);
+        fireEffect.transform.localScale = objectSize;
+
+
         ParticleSystem fireParticleSystem = fireEffect.GetComponent<ParticleSystem>();
-
         ParticleSystem.ShapeModule shape = fireParticleSystem.shape;
-        shape.radius = intensity * 2f;  // Crește raza zonei de emitere pe măsură ce intensitatea crește
+        shape.radius = intensity * 2f;  
 
-        // Dacă vrei să modifici și durata sau viteza particulelor, o poți face aici:
         var main = fireParticleSystem.main;
-        main.startLifetime = Mathf.Lerp(1f, 2f, intensity / 10f);  // Ajustează durata pe baza intensității
-
-        // Activează sistemul de particule
+        main.startLifetime = Mathf.Lerp(1f, 2f, intensity / 10f); 
+        main.startSize = Mathf.Max(0.2f, Mathf.Min(objectSize.y, 2 * objectSize.x));
+    
         fireParticleSystem.Play();
     }
 }
