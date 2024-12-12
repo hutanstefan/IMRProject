@@ -9,21 +9,21 @@ public class AddRigidbodiesInCollider : MonoBehaviour
     public float staticVolumeThreshold = 10f; // Pragul de volum pentru a marca obiectele ca statice
     public float minimumMass = 1f;
     private bool hasBeenApplied = false;
-
+    public float startDelay = 5f; // Întârzierea de pornire în secunde
     // Lista cuvintele cheie pentru obiectele statice
-    private string[] staticKeywords = { "counter", "cabinet", "drawer", "building", "wall", "floor", "ceiling", "pillar", "door", "window", "roof" };
+    private string[] staticKeywords = { "counter", "cabinet", "drawer", "building", "wall", "floor", "ceiling", "pillar", "door", "window", "roof" ,"xr", "manager"};
     private string[] separators = {"_", ",", ".", "-", " "};
 
-    void Update()
+    void Start()
     {
-        // Detectează apăsarea tastei Space
-        if (Input.GetKeyDown(KeyCode.Space) && !hasBeenApplied)
-        {
-            ApplyRigidbodies();
-            hasBeenApplied = true;
-        }
+        StartCoroutine(ApplyRigidbodiesAfterDelay(startDelay));
     }
-
+    
+    private IEnumerator ApplyRigidbodiesAfterDelay(float delay)
+    {
+        yield return new WaitForSeconds(delay);
+        ApplyRigidbodies();
+    }
     private void ApplyRigidbodies()
     {
         // Găsește toate obiectele din zonă

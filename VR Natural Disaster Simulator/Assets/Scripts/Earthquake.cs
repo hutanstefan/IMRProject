@@ -5,18 +5,21 @@ using UnityEngine;
 public class Earthquake : MonoBehaviour
 {
     public float intensity = 5f; // Intensitatea cutremurului
-    public float duration = 2f; // Durata cutremurului în secunde
+    public float duration = 30f; // Durata cutremurului în secunde
+    public float startDelay = 5f; // Întârzierea de pornire în secunde
 
     private bool isShaking = false;
     private float shakeTimer;
 
-    void Update()
+    void Start()
     {
-        // Detectăm dacă utilizatorul apasă Enter
-        if (Input.GetKeyDown(KeyCode.Return) && !isShaking)
-        {
-            StartCoroutine(Shake());
-        }
+        StartCoroutine(StartEarthquakeAfterDelay(startDelay));
+    }
+
+    IEnumerator StartEarthquakeAfterDelay(float delay)
+    {
+        yield return new WaitForSeconds(delay);
+        StartCoroutine(Shake());
     }
 
     IEnumerator Shake()
