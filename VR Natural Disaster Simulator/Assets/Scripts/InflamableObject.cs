@@ -39,7 +39,7 @@ public class InflamableObject : MonoBehaviour
        if (isBurning)
     {
         health -= Time.deltaTime * burnRate*2;
-        Debug.Log($"{gameObject.name} are {health} viata.");
+        //Debug.Log($"{gameObject.name} are {health} viata.");
 
         if (health <= 0f)
         {

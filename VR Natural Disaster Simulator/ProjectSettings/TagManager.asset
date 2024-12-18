@@ -5,11 +5,12 @@ TagManager:
   serializedVersion: 2
   tags:
   - Inflamable
+  - Fire
   layers:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - 
+  - PostProcessing
   - Water
   - UI
   - 

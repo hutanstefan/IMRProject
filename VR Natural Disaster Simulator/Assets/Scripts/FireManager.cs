@@ -38,16 +38,16 @@ public class FireManager : MonoBehaviour
                 inflamableComponent.Ignite(baseIntensity,3f);
                 burningObjects.Add(inflamableComponent);
                 CreateFireEffect(inflamableComponent.transform.position, baseIntensity, inflamableComponent.GetComponent<Renderer>().bounds.size);
-                Debug.Log($"{randomObject.name} a început să ardă! Are dimensiunea:{inflamableComponent.GetComponent<Renderer>().bounds.size} Intensitatea focului: {baseIntensity}");
+                //Debug.Log($"{randomObject.name} a început să ardă! Are dimensiunea:{inflamableComponent.GetComponent<Renderer>().bounds.size} Intensitatea focului: {baseIntensity}");
             }
             else
             {
-                Debug.LogError($"Obiectul {randomObject.name} nu are componenta InflamableObject!");
+                //Debug.LogError($"Obiectul {randomObject.name} nu are componenta InflamableObject!");
             }
         }
         else
         {
-            Debug.LogError("Nu au fost găsite obiecte cu tag-ul Inflamable.");
+            //Debug.LogError("Nu au fost găsite obiecte cu tag-ul Inflamable.");
         }
     }
 
