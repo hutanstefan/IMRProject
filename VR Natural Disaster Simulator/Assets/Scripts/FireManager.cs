@@ -38,7 +38,6 @@ public class FireManager : MonoBehaviour
                 inflamableComponent.Ignite(baseIntensity,3f);
                 burningObjects.Add(inflamableComponent);
                 CreateFireEffect(inflamableComponent.transform.position, baseIntensity, inflamableComponent.GetComponent<Renderer>().bounds.size);
-                //Debug.Log($"{randomObject.name} a început să ardă! Are dimensiunea:{inflamableComponent.GetComponent<Renderer>().bounds.size} Intensitatea focului: {baseIntensity}");
             }
             else
             {
