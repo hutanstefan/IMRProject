@@ -1,0 +1,45 @@
+{
+    "name": "XRInputActions",
+    "maps": [
+        {
+            "name": "Gameplay",
+            "id": "e33e6e8a-01bc-4225-9575-925dbbb2c6f6",
+            "actions": [
+                {
+                    "name": "UseFireExtinguisher",
+                    "type": "Button",
+                    "id": "08e1e0d5-6fdf-429f-ba2e-8804b5fc3a5d",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "a4e0a19c-c4ed-41e8-a6fe-5f82368aafe5",
+                    "path": "<XRSimulatedController>{RightHand}/primaryButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "UseFireExtinguisher",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "d0cf0e1f-5842-48c6-91a5-024833ad1e4c",
+                    "path": "<XRController>{RightHand}/{PrimaryButton}",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "UseFireExtinguisher",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
+        }
+    ],
+    "controlSchemes": []
+}
