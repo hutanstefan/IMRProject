@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class Earthquake : MonoBehaviour
 {
+    public CeilingParticles ceilingParticles;
     public float intensity = 5f; // Intensitatea cutremurului
     public float duration = 30f; // Durata cutremurului în secunde
     public float startDelay = 5f; // Întârzierea de pornire în secunde
@@ -14,6 +15,16 @@ public class Earthquake : MonoBehaviour
     void Start()
     {
         StartCoroutine(StartEarthquakeAfterDelay(startDelay));
+    }
+
+    void Update()
+    {
+        if(isShaking)
+        {
+            ceilingParticles.StartParticles();
+        } else {
+            ceilingParticles.StopParticles();
+        }
     }
 
     IEnumerator StartEarthquakeAfterDelay(float delay)
