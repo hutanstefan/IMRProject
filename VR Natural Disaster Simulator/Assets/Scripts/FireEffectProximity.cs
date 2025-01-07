@@ -4,9 +4,10 @@ using UnityEngine.Rendering;
 public class FireEffectProximity : MonoBehaviour
 {
     public GameObject postProcessingVolume; // Reference to the post-process volume
-    public float activationDistance = 5f; // Distance within which the effect activates
-    public Transform player; // Player's transform (e.g., camera rig)
-    public string fireTag = "Fire"; // Tag assigned to fire GameObjects
+    public float activationDistance = 2f; // Distance within which the effect activates
+    public Transform player; 
+    public string fireTag = "Fire"; 
+    private float maxHeightDifference=2f;
 
     private bool isEffectActive = false;
 
@@ -33,23 +34,31 @@ public class FireEffectProximity : MonoBehaviour
         if (postProcessingVolume == null || player == null)
             return;
 
-        // Find the closest fire object
         GameObject closestFire = FindClosestFire();
         if (closestFire == null)
         {
-            Debug.Log("No fire detected.");
+            //Debug.Log("No fire detected.");
             return;
         }
 
-        // Calculate the distance to the closest fire
-        float distance = Vector3.Distance(closestFire.transform.position, player.position);
-        //Debug.Log($"Fire detected at distance: {distance}");
-        // Enable or disable the effect based on distance
-        if (distance <= activationDistance && !isEffectActive)
+        float heightDifference = Mathf.Abs(player.position.y - closestFire.transform.position.y);
+        if (heightDifference <= maxHeightDifference)
         {
-            EnableEffect();
+            float distance = Vector3.Distance(new Vector3(player.position.x, closestFire.transform.position.y, player.position.z), 
+                                              new Vector3(closestFire.transform.position.x, closestFire.transform.position.y, closestFire.transform.position.z));
+
+            Vector3 directionToFire = (closestFire.transform.position - player.position).normalized;
+            float dotProduct = Vector3.Dot(player.forward, directionToFire);
+            if (((distance <= activationDistance && dotProduct > 0.5f) || distance<=1f) && !isEffectActive)
+            {
+                EnableEffect();
+            }
+            else if ((distance > activationDistance || dotProduct <= 0.5f) && isEffectActive)
+            {
+                DisableEffect();
+            }
         }
-        else if (distance > activationDistance && isEffectActive)
+        else if(isEffectActive)
         {
             DisableEffect();
         }

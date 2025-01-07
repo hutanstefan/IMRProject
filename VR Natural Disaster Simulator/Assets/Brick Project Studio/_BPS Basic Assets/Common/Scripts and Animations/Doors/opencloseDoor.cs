@@ -7,7 +7,7 @@ namespace SojaExiles
 {
     public class opencloseDoor : MonoBehaviour
     {
-        public Animator openandclose;
+        private Animator openandclose;
         private bool open=false;
         public Transform Player;
 
@@ -16,6 +16,16 @@ namespace SojaExiles
         void Start()
         {
             open = false;
+            //Debug.Log($"Door {gameObject.name} is active");
+            openandclose = GetComponent<Animator>();
+            if (openandclose == null)
+            {
+                Debug.LogError($"[{gameObject.name}] Nu s-a găsit componenta Animator pe acest GameObject!");
+            }
+            else
+            {
+                Debug.Log($"[{gameObject.name}] Animator detectat: {openandclose.runtimeAnimatorController.name}");
+            }
         }
 
         void Update()
@@ -24,9 +34,10 @@ namespace SojaExiles
             if (Player)
             {
                 float dist = Vector3.Distance(Player.position, transform.position);
-                if (dist < 1.5 )
+                if (dist < 2.3 )
                 {
-					Debug.Log("Distanța între jucător și ușă: " + dist + " | Stare ușă: " + open);
+					Debug.Log("Distanța între jucător și ușă: " + dist + " | Stare ușă: " + open + " usa " + gameObject.name );
+                    Debug.Log($"[{gameObject.name}] Animator detectat: {openandclose.runtimeAnimatorController.name}");
                     if (open == false)
                     {
                         StartCoroutine(opening());
@@ -37,6 +48,7 @@ namespace SojaExiles
                     StartCoroutine(closing()); 
 					open=false;
                 }
+   
             }
         }
 
