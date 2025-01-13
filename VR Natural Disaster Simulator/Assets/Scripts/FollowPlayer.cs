@@ -21,7 +21,7 @@ public class FollowPlayer : MonoBehaviour
                 // Compute the target rotation
                 Quaternion targetRotation = Quaternion.LookRotation(direction);
 
-                // Smoothly interpolate the rotation
+                // Smoothly interpolate the rotation 
                 transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, rotationSpeed * Time.deltaTime);
             }
         }
