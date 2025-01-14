@@ -11,6 +11,7 @@ public class FireManager : MonoBehaviour
     public float initialIgnitionDelay = 5f;   
     private float spreadCooldown = 40f; 
     private float lastSpreadTime = 0f;
+    private float numberOfStartedFire=1;
 
     private List<InflamableObject> burningObjects = new List<InflamableObject>(); 
 
@@ -24,31 +25,51 @@ public class FireManager : MonoBehaviour
         SpreadFire();
     }
 
-    void StartRandomFire()
+    public void setSpreadCoolDown(float val)
     {
-        GameObject[] flammableObjects = GameObject.FindGameObjectsWithTag(flammableTag);
+        spreadCooldown=val;
+    }
 
-        if (flammableObjects.Length > 0)
+    public void  setFireNumber(float nr)
+    {
+        numberOfStartedFire=nr;
+    }
+
+    void StartRandomFire()
+{
+    GameObject[] flammableObjects = GameObject.FindGameObjectsWithTag(flammableTag);
+
+    if (flammableObjects.Length == 0)
+    {
+        Debug.LogError("Nu au fost găsite obiecte cu tag-ul Inflamable.");
+        return;
+    }
+
+    List<GameObject> availableObjects = new List<GameObject>(flammableObjects);
+
+    int firesToStart = Mathf.Min(Mathf.FloorToInt(numberOfStartedFire), availableObjects.Count); 
+
+    for (int i = 0; i < firesToStart; i++)
+    {
+        GameObject randomObject = availableObjects[Random.Range(0, availableObjects.Count)];
+        InflamableObject inflamableComponent = randomObject.GetComponent<InflamableObject>();
+
+        if (inflamableComponent != null)
         {
-            GameObject randomObject = flammableObjects[Random.Range(0, flammableObjects.Length)];
-            InflamableObject inflamableComponent = randomObject.GetComponent<InflamableObject>();
+            inflamableComponent.Ignite(baseIntensity, 3f);
+            burningObjects.Add(inflamableComponent);
+            CreateFireEffect(inflamableComponent.transform.position, baseIntensity, inflamableComponent.GetComponent<Renderer>().bounds.size);
 
-            if (inflamableComponent != null)
-            {
-                inflamableComponent.Ignite(baseIntensity,3f);
-                burningObjects.Add(inflamableComponent);
-                CreateFireEffect(inflamableComponent.transform.position, baseIntensity, inflamableComponent.GetComponent<Renderer>().bounds.size);
-            }
-            else
-            {
-                //Debug.LogError($"Obiectul {randomObject.name} nu are componenta InflamableObject!");
-            }
+            availableObjects.Remove(randomObject);
         }
         else
         {
-            //Debug.LogError("Nu au fost găsite obiecte cu tag-ul Inflamable.");
+            Debug.LogError($"Obiectul {randomObject.name} nu are componenta InflamableObject!");
+            availableObjects.Remove(randomObject); 
         }
     }
+}
+
 
 
 void SpreadFire()

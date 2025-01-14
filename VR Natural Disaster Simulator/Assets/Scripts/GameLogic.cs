@@ -9,11 +9,12 @@ public class GameLogic : MonoBehaviour
     private float startTime; 
     private bool timerRunning = true; 
     private float elapsedTime = 0f;
-    private float timeInFire = 0f; //timpul petrecut in apropierea focului
+    private float timeInFire = 0f; 
     private bool onFire = false;
     private float inFireStartTime;
     private int finalScore = 0;
     public string fireTag = "Fire"; 
+    public float targetTime=0f;
 
     void Start()
     {
@@ -53,7 +54,11 @@ public class GameLogic : MonoBehaviour
         timerRunning = false;
         elapsedTime = Time.time - startTime; 
         //Debug.Log("Timpul scurs: " + elapsedTime + " secunde");
-        finalScore = Mathf.FloorToInt(elapsedTime - timeInFire * 1.2f) * 10; 
+        float timePenalty = Mathf.Max(0f, (elapsedTime - targetTime) / targetTime) * 5f;
+        float firePenalty = timeInFire * 0.5f;
+        float score = Mathf.Max(0f, 100f - timePenalty - firePenalty);
+        finalScore = Mathf.FloorToInt(score);
+         //scor maxim 100, am penalizare de timp daca se depaseste target time si penalizare pentru timpul petrecut in foc
         ShowScoreboard();
     }
 
