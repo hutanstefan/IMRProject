@@ -22,7 +22,7 @@ public class AddInflamableToAllObjects : MonoBehaviour
 
                 if (obj.CompareTag(flammableTag))
                 {
-                    Debug.Log($"InflamableObject a fost adăugat la obiectul cu tag Inflamable: {obj.name}");
+                   // Debug.Log($"InflamableObject a fost adăugat la obiectul cu tag Inflamable: {obj.name}");
                 }
             }
         }

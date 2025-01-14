@@ -43,7 +43,7 @@ public class InflamableObject : MonoBehaviour
 
         if (health <= 0f)
         {
-             Debug.Log($"{gameObject.name} a ars complet");
+            //Debug.Log($"{gameObject.name} a ars complet");
             health = 0f;
             Extinguish(); 
         }

@@ -7,6 +7,9 @@ TagManager:
   - Inflamable
   - Fire
   - Breaker
+  - Hard
+  - Easy
+  - Medium
   layers:
   - Default
   - TransparentFX

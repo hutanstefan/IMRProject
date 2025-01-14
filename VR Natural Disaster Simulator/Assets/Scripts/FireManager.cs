@@ -12,6 +12,8 @@ public class FireManager : MonoBehaviour
     private float spreadCooldown = 40f; 
     private float lastSpreadTime = 0f;
     private float numberOfStartedFire=1;
+    public AudioSource fireAlarmAudioSource;
+    public bool firstFireStarted=false;
 
     private List<InflamableObject> burningObjects = new List<InflamableObject>(); 
 
@@ -61,6 +63,12 @@ public class FireManager : MonoBehaviour
             CreateFireEffect(inflamableComponent.transform.position, baseIntensity, inflamableComponent.GetComponent<Renderer>().bounds.size);
 
             availableObjects.Remove(randomObject);
+
+             if (!firstFireStarted)
+                {
+                    firstFireStarted = true;
+                    fireAlarmAudioSource.Play(); 
+                }
         }
         else
         {
