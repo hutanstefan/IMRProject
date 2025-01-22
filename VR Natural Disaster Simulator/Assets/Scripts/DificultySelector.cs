@@ -10,6 +10,11 @@ public class DifficultySelector : MonoBehaviour
     public GameObject xrRig;
     private List<Transform> startLocations = new List<Transform>();
 
+    void Awake()
+    {
+        difficulty = PlayerPrefs.GetString("difficulty", "Medium");
+    }
+
     void Start()
     {
         ApplyDifficultySettings();
