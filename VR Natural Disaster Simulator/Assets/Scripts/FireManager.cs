@@ -25,6 +25,7 @@ public class FireManager : MonoBehaviour
     void Update()
     {
         SpreadFire();
+        RemoveExtinguishedFires();
     }
 
     public void setSpreadCoolDown(float val)
@@ -36,106 +37,106 @@ public class FireManager : MonoBehaviour
     {
         numberOfStartedFire=nr;
     }
-
-    void StartRandomFire()
-{
-    GameObject[] flammableObjects = GameObject.FindGameObjectsWithTag(flammableTag);
-
-    if (flammableObjects.Length == 0)
+    void RemoveExtinguishedFires()
     {
-        Debug.LogError("Nu au fost găsite obiecte cu tag-ul Inflamable.");
-        return;
+        burningObjects.RemoveAll(obj => obj == null || !obj.isBurning);
     }
-
-    List<GameObject> availableObjects = new List<GameObject>(flammableObjects);
-
-    int firesToStart = Mathf.Min(Mathf.FloorToInt(numberOfStartedFire), availableObjects.Count); 
-
-    for (int i = 0; i < firesToStart; i++)
+    void StartRandomFire()
     {
-        GameObject randomObject = availableObjects[Random.Range(0, availableObjects.Count)];
-        InflamableObject inflamableComponent = randomObject.GetComponent<InflamableObject>();
+        GameObject[] flammableObjects = GameObject.FindGameObjectsWithTag(flammableTag);
 
-        if (inflamableComponent != null)
+        if (flammableObjects.Length == 0)
         {
-            inflamableComponent.Ignite(baseIntensity, 3f);
-            burningObjects.Add(inflamableComponent);
-            CreateFireEffect(inflamableComponent.transform.position, baseIntensity, inflamableComponent.GetComponent<Renderer>().bounds.size);
+            Debug.LogError("No objects found with the Inflamable tag.");
+            return;
+        }
 
-            availableObjects.Remove(randomObject);
+        List<GameObject> availableObjects = new List<GameObject>(flammableObjects);
 
-             if (!firstFireStarted)
+        int firesToStart = Mathf.Min(Mathf.FloorToInt(numberOfStartedFire), availableObjects.Count);
+
+        for (int i = 0; i < firesToStart; i++)
+        {
+            GameObject randomObject = availableObjects[Random.Range(0, availableObjects.Count)];
+            InflamableObject inflamableComponent = randomObject.GetComponent<InflamableObject>();
+
+            if (inflamableComponent != null)
+            {
+                GameObject fireEffect = CreateFireEffect(inflamableComponent.transform.position, baseIntensity, inflamableComponent.GetComponent<Renderer>().bounds.size);
+                inflamableComponent.Ignite(baseIntensity, 3f, fireEffect);
+                burningObjects.Add(inflamableComponent);
+
+                availableObjects.Remove(randomObject);
+
+                if (!firstFireStarted)
                 {
                     firstFireStarted = true;
-                    fireAlarmAudioSource.Play(); 
+                    fireAlarmAudioSource.Play();
                 }
-        }
-        else
-        {
-            Debug.LogError($"Obiectul {randomObject.name} nu are componenta InflamableObject!");
-            availableObjects.Remove(randomObject); 
-        }
-    }
-}
-
-
-
-void SpreadFire()
-{
-    if (Time.time - lastSpreadTime < spreadCooldown) 
-        return; 
-    lastSpreadTime = Time.time;
-    List<GameObject> newBurningObjects = new List<GameObject>();
-
-    foreach (var burningObject in burningObjects)
-    {
-        if (burningObject != null)  
-        {
-            Collider[] nearbyObjects = Physics.OverlapSphere(burningObject.transform.position, spreadRadius);
-
-            foreach (var collider in nearbyObjects)
+            }
+            else
             {
-                InflamableObject nearbyInflamable = collider.GetComponent<InflamableObject>();
-
-                if (nearbyInflamable != null && !nearbyInflamable.isBurning && !burningObjects.Contains(nearbyInflamable))
-                {
-                    float intensity = baseIntensity;
-                    float burnRate = 1f;
-
-                    if (nearbyInflamable.CompareTag(flammableTag))
-                    {
-                        intensity += extraIntensity;
-                        burnRate = 1.5f;            
-                    }
-                    else
-                    {
-                        intensity *= 0.5f; 
-                        burnRate = 0.5f;   
-                    }
-
-                    nearbyInflamable.Ignite(intensity, burnRate);
-                    newBurningObjects.Add(nearbyInflamable.gameObject);  
-
-                    CreateFireEffect(nearbyInflamable.transform.position, intensity, nearbyInflamable.GetComponent<Renderer>().bounds.size);
-
-                    //Debug.Log($"Obiect {nearbyInflamable.name} arde cu burnRate {burnRate} și intensitate {intensity}");
-                }
+                Debug.LogError($"Object {randomObject.name} does not have an InflamableObject component!");
+                availableObjects.Remove(randomObject);
             }
         }
     }
 
-   foreach (var newObject in newBurningObjects)
-{
-    var inflamableComponent = newObject.GetComponent<InflamableObject>();
-    if (inflamableComponent != null)
+
+
+    void SpreadFire()
     {
-        burningObjects.Add(inflamableComponent);
+        if (Time.time - lastSpreadTime < spreadCooldown)
+            return;
+        lastSpreadTime = Time.time;
+        List<GameObject> newBurningObjects = new List<GameObject>();
+
+        foreach (var burningObject in burningObjects)
+        {
+            if (burningObject != null)
+            {
+                Collider[] nearbyObjects = Physics.OverlapSphere(burningObject.transform.position, spreadRadius);
+
+                foreach (var collider in nearbyObjects)
+                {
+                    InflamableObject nearbyInflamable = collider.GetComponent<InflamableObject>();
+
+                    if (nearbyInflamable != null && !nearbyInflamable.isBurning && !burningObjects.Contains(nearbyInflamable))
+                    {
+                        float intensity = baseIntensity;
+                        float burnRate = 1f;
+
+                        if (nearbyInflamable.CompareTag(flammableTag))
+                        {
+                            intensity += extraIntensity;
+                            burnRate = 1.5f;
+                        }
+                        else
+                        {
+                            intensity *= 0.5f;
+                            burnRate = 0.5f;
+                        }
+
+                        GameObject fireEffect = CreateFireEffect(nearbyInflamable.transform.position, intensity, nearbyInflamable.GetComponent<Renderer>().bounds.size);
+                        nearbyInflamable.Ignite(intensity, burnRate, fireEffect);
+                        newBurningObjects.Add(nearbyInflamable.gameObject);
+                    }
+                }
+            }
+        }
+
+        foreach (var newObject in newBurningObjects)
+        {
+            var inflamableComponent = newObject.GetComponent<InflamableObject>();
+            if (inflamableComponent != null)
+            {
+                burningObjects.Add(inflamableComponent);
+            }
+        }
     }
-}
-}
 
 
-void CreateFireEffect(Vector3 position, float intensity, Vector3 objectSize)
+private GameObject CreateFireEffect(Vector3 position, float intensity, Vector3 objectSize)
 {
     GameObject fireEffect = Instantiate(fireEffectPrefab, position, Quaternion.identity);
 
@@ -151,5 +152,7 @@ void CreateFireEffect(Vector3 position, float intensity, Vector3 objectSize)
     fireEffect.transform.rotation = Quaternion.Euler(-90, 0, 0);
 
     fireParticleSystem.Play();
+
+    return fireEffect;
 }
 }

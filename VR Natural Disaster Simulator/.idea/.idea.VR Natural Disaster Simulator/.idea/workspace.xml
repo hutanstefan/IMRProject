@@ -5,17 +5,23 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="b5856011-ad31-4304-b03a-e5eb62ce7e79" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/.idea.VR Natural Disaster Simulator/.idea/projectSettingsUpdater.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.VR Natural Disaster Simulator/.idea/projectSettingsUpdater.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/.idea.VR Natural Disaster Simulator/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.VR Natural Disaster Simulator/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scenes/DemoScene.unity" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scenes/DemoScene.unity" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scenes/FireScene.unity" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scenes/FireScene.unity" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/AddRigidbodiesInCollider.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/AddRigidbodiesInCollider.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/CameraShake.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/CameraShake.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Earthquake.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Earthquake.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/XRI/Settings/Resources/InteractionLayerSettings.asset" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/XRI/Settings/Resources/InteractionLayerSettings.asset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ProjectSettings/EditorBuildSettings.asset" beforeDir="false" afterPath="$PROJECT_DIR$/ProjectSettings/EditorBuildSettings.asset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ProjectSettings/ProjectSettings.asset" beforeDir="false" afterPath="$PROJECT_DIR$/ProjectSettings/ProjectSettings.asset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assembly-CSharp.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/Assembly-CSharp.csproj" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/FireEffect 1.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/FireEffect 1.prefab" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Materials/FlameParticle1_I.mat" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Materials/FlameParticle1_I.mat" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scenes/TemporaryFireScene.unity" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scenes/TemporaryFireScene.unity" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/FireExtinguisher.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/FireExtinguisher.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/FireManager.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/FireManager.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/InflamableObject.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/InflamableObject.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ProjectSettings/TagManager.asset" beforeDir="false" afterPath="$PROJECT_DIR$/ProjectSettings/TagManager.asset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Unity.XR.Interaction.Toolkit.Samples.DeviceSimulator.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/Unity.XR.Interaction.Toolkit.Samples.DeviceSimulator.csproj" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Unity.XR.Interaction.Toolkit.Samples.StarterAssets.Editor.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/Unity.XR.Interaction.Toolkit.Samples.StarterAssets.Editor.csproj" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Unity.XR.Interaction.Toolkit.Samples.StarterAssets.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/Unity.XR.Interaction.Toolkit.Samples.StarterAssets.csproj" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/UserSettings/EditorUserSettings.asset" beforeDir="false" afterPath="$PROJECT_DIR$/UserSettings/EditorUserSettings.asset" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/UserSettings/Layouts/CurrentMaximizeLayout.dwlt" beforeDir="false" afterPath="$PROJECT_DIR$/UserSettings/Layouts/CurrentMaximizeLayout.dwlt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/UserSettings/Layouts/default-2022.dwlt" beforeDir="false" afterPath="$PROJECT_DIR$/UserSettings/Layouts/default-2022.dwlt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/VR Natural Disaster Simulator.sln" beforeDir="false" afterPath="$PROJECT_DIR$/VR Natural Disaster Simulator.sln" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -27,7 +33,8 @@
   </component>
   <component name="HighlightingSettingsPerFile">
     <setting file="file://$PROJECT_DIR$/Assets/Scripts/AddInflamableObject.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Assets/Scripts/FireManager.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/Scripts/FireExtinguisher.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/Scripts/FireManager.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Scripts/InflamableObject.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Library/PackageCache/com.unity.xr.openxr@1.13.2/Runtime/OpenXRProjectValidation.cs" root0="SKIP_HIGHLIGHTING" />
   </component>
@@ -43,25 +50,21 @@
   &quot;keyToString&quot;: {
     &quot;Attach to Unity Editor.Attach to Unity Editor.executor&quot;: &quot;Debug&quot;,
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
     &quot;git-widget-placeholder&quot;: &quot;main&quot;,
+    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
     &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
     &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
     &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
     &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
     &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.sourceCode.C#&quot;,
     &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
-  },
-  &quot;keyToStringList&quot;: {
-    &quot;rider.external.source.directories&quot;: [
-      &quot;C:\\Users\\Emil\\AppData\\Roaming\\JetBrains\\Rider2024.1\\resharper-host\\DecompilerCache&quot;,
-      &quot;C:\\Users\\Emil\\AppData\\Roaming\\JetBrains\\Rider2024.1\\resharper-host\\SourcesCache&quot;,
-      &quot;C:\\Users\\Emil\\AppData\\Local\\Symbols\\src&quot;
-    ]
   }
 }</component>
   <component name="RunManager" selected="Attach to Unity Editor.Attach to Unity Editor">
     <configuration name="Start Unity" type="RunUnityExe" factoryName="Unity Executable">
-      <option name="EXE_PATH" value="C:\Program Files\Unity\Hub\Editor\2022.3.53f1\Editor\Unity.exe" />
+      <option name="EXE_PATH" value="D:\Programe\Unity\2022.3.53f1\Editor\Unity.exe" />
       <option name="PROGRAM_PARAMETERS" value="-projectPath &quot;D:\Facultate\IMRProject\VR Natural Disaster Simulator&quot; -debugCodeOptimization" />
       <option name="WORKING_DIRECTORY" value="D:\Facultate\IMRProject\VR Natural Disaster Simulator" />
       <option name="PASS_PARENT_ENVS" value="1" />
@@ -69,7 +72,7 @@
       <method v="2" />
     </configuration>
     <configuration name="Unit Tests (batch mode)" type="RunUnityExe" factoryName="Unity Executable">
-      <option name="EXE_PATH" value="C:\Program Files\Unity\Hub\Editor\2022.3.53f1\Editor\Unity.exe" />
+      <option name="EXE_PATH" value="D:\Programe\Unity\2022.3.53f1\Editor\Unity.exe" />
       <option name="PROGRAM_PARAMETERS" value="-runTests -batchmode -projectPath &quot;D:\Facultate\IMRProject\VR Natural Disaster Simulator&quot; -testResults Logs/results.xml -testPlatform EditMode -debugCodeOptimization" />
       <option name="WORKING_DIRECTORY" value="D:\Facultate\IMRProject\VR Natural Disaster Simulator" />
       <option name="PASS_PARENT_ENVS" value="1" />
@@ -81,6 +84,9 @@
       <option name="listenPortForConnections" value="false" />
       <option name="pid" />
       <option name="projectPathOnTarget" />
+      <option name="runtimes">
+        <list />
+      </option>
       <option name="selectedOptions">
         <list />
       </option>
@@ -91,6 +97,9 @@
       <option name="listenPortForConnections" value="false" />
       <option name="pid" />
       <option name="projectPathOnTarget" />
+      <option name="runtimes">
+        <list />
+      </option>
       <option name="selectedOptions">
         <list />
       </option>
@@ -110,6 +119,10 @@
       <workItem from="1733745608129" duration="594000" />
       <workItem from="1733929144474" duration="1389000" />
       <workItem from="1733933400324" duration="3530000" />
+      <workItem from="1737554346922" duration="2326000" />
+      <workItem from="1737557028184" duration="8373000" />
+      <workItem from="1737653951215" duration="9422000" />
+      <workItem from="1737734923220" duration="8774000" />
     </task>
     <servers />
   </component>
