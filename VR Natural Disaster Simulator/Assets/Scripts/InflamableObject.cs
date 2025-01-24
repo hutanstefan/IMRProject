@@ -11,6 +11,9 @@ public class InflamableObject : MonoBehaviour
      private Rigidbody rb; 
      private Renderer objectRenderer;     
     private Material objectMaterial;
+    private float lastReductionTime;
+    private float regenerationDelay = 2f; // 2 seconds delay for regeneration
+
 
     void Start()
     {
@@ -22,18 +25,44 @@ public class InflamableObject : MonoBehaviour
         }
     }
 
-    public void Ignite(float intensity, float burnRateParam)
+    public void Ignite(float intensity, float burnRateParam, GameObject fireEffect)
     {
         if (!isBurning)
         {
             isBurning = true;
             fireIntensity = intensity;
-            burnRate=burnRateParam;
-           // Debug.Log($"{gameObject.name} a început să ardă cu intensitatea {fireIntensity}.");
+            burnRate = burnRateParam;
+            fireEffectInstance = fireEffect;
+            lastReductionTime = Time.time;
         }
     }
 
-
+    public void ReduceFireIntensity(float amount)
+    {
+        if (isBurning)
+        {
+            fireIntensity -= amount;
+            lastReductionTime = Time.time;
+            if (fireIntensity <= 0f)
+            {
+                fireIntensity = 0f;
+                Extinguish();
+            }
+            else
+            {
+                // Scale down the fire effect based on the current fireIntensity
+                if (fireEffectInstance != null)
+                {
+                    ParticleSystem fireParticleSystem = fireEffectInstance.GetComponent<ParticleSystem>();
+                    if (fireParticleSystem != null)
+                    {
+                        var main = fireParticleSystem.main;
+                        main.startSize = Mathf.Lerp(0.1f, 1f, fireIntensity / 100f);
+                    }
+                }
+            }
+        }
+    }
      void Update()
     {
        if (isBurning)
@@ -73,6 +102,20 @@ public class InflamableObject : MonoBehaviour
                 }
             }
         }
+        // Regenerate fire if not extinguished within the delay
+        if (Time.time - lastReductionTime > regenerationDelay)
+        {
+            fireIntensity = Mathf.Min(fireIntensity + burnRate * Time.deltaTime, 100f);
+            if (fireEffectInstance != null)
+            {
+                ParticleSystem fireParticleSystem = fireEffectInstance.GetComponent<ParticleSystem>();
+                if (fireParticleSystem != null)
+                {
+                    var main = fireParticleSystem.main;
+                    main.startSize = Mathf.Lerp(0.1f, 1f, fireIntensity / 100f);
+                }
+            }
+        }
     }
     }
 
@@ -87,10 +130,17 @@ public class InflamableObject : MonoBehaviour
 
             if (fireEffectInstance != null)
             {
+                ParticleSystem fireParticleSystem = fireEffectInstance.GetComponent<ParticleSystem>();
+                if (fireParticleSystem != null)
+                {
+                    //Debug.Log("Particulele de foc au fost oprite.");
+                    fireParticleSystem.Stop();
+                }
                 Destroy(fireEffectInstance);
+                fireEffectInstance = null; // Ensure the reference is cleared
             }
 
-            Debug.Log($"{gameObject.name} a fost stins.");
+            //Debug.Log($"{gameObject.name} has been extinguished.");
         }
     }
 }

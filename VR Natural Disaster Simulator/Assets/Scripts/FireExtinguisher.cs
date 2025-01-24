@@ -6,6 +6,8 @@ public class FireExtinguisher : MonoBehaviour
 {
     [SerializeField] private ParticleSystem particleSystem; // Reference to the Particle System
     [SerializeField] private InputActionReference activateParticlesAction; // Input Action reference
+    [SerializeField] private float rayDistance = 100f; // Distance of the ray
+    [SerializeField] private float extinguishRate = 10f; // Rate at which the fire is extinguished
 
     private XRGrabInteractable grabInteractable;
 
@@ -49,6 +51,29 @@ public class FireExtinguisher : MonoBehaviour
         {
             if (!particleSystem.isPlaying)
                 particleSystem.Play();
+
+            // Launch a ray to detect burning flammable objects
+            Ray ray = new Ray(particleSystem.transform.position, particleSystem.transform.forward);
+            RaycastHit hit;
+
+            if (Physics.Raycast(ray, out hit, rayDistance))
+            {
+                InflamableObject inflamableObject = hit.collider.GetComponent<InflamableObject>();
+
+                if (inflamableObject != null && inflamableObject.isBurning)
+                {
+                    inflamableObject.ReduceFireIntensity(extinguishRate * Time.deltaTime);
+                    Debug.Log($"{hit.collider.gameObject.name} fire extinguished!");
+                }
+                else
+                {
+                    //Debug.Log("No burning object detected.");
+                }
+            }
+            else
+            {
+                //Debug.Log("No object detected.");
+            }
         }
         else
         {
@@ -67,4 +92,5 @@ public class FireExtinguisher : MonoBehaviour
         isHeld = false;
         particleSystem.Stop(); // Ensure particles stop when released
     }
+    
 }
