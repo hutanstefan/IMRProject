@@ -10,10 +10,10 @@ public class DifficultySelector : MonoBehaviour
     public GameObject xrRig;
     private List<Transform> startLocations = new List<Transform>();
 
-    void Awake()
+    /*void Awake()
     {
         difficulty = PlayerPrefs.GetString("difficulty", "Medium");
-    }
+    }*/
 
     void Start()
     {
@@ -83,31 +83,31 @@ public class DifficultySelector : MonoBehaviour
     private void SetEasySettings()
     {
         fireManager.spreadRadius = 0.5f; 
-        fireManager.baseIntensity = 0.8f;
+        fireManager.baseIntensity = 0.001f;
         fireManager.extraIntensity = 0.5f;
         fireManager.initialIgnitionDelay = 8f;
-        fireManager.setSpreadCoolDown(50f);
+        fireManager.setSpreadCoolDown(20f);
         gameLogic.targetTime=120;
     }
 
     private void SetMediumSettings()
     {
         fireManager.spreadRadius = 1f;
-        fireManager.baseIntensity = 1f;
-        fireManager.extraIntensity = 1f;
+        fireManager.baseIntensity = 0.005f;
+        fireManager.extraIntensity = 0.6f;
         fireManager.initialIgnitionDelay = 6f;
-        fireManager.setSpreadCoolDown(30f);
+        fireManager.setSpreadCoolDown(18f);
         gameLogic.targetTime=105;
     }
 
     private void SetHardSettings()
     {
         fireManager.spreadRadius = 2f; 
-        fireManager.baseIntensity = 1.5f;
-        fireManager.extraIntensity = 2f;
+        fireManager.baseIntensity = 1f;
+        fireManager.extraIntensity = 1f;
         fireManager.initialIgnitionDelay = 3f;
         fireManager.setFireNumber(2); 
-        fireManager.setSpreadCoolDown(20f);
+        fireManager.setSpreadCoolDown(13f);
          gameLogic.targetTime=90; 
     }
 }

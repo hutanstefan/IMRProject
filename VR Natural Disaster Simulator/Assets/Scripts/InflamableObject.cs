@@ -50,7 +50,6 @@ public class InflamableObject : MonoBehaviour
             }
             else
             {
-                // Scale down the fire effect based on the current fireIntensity
                 if (fireEffectInstance != null)
                 {
                     ParticleSystem fireParticleSystem = fireEffectInstance.GetComponent<ParticleSystem>();
@@ -72,12 +71,12 @@ public class InflamableObject : MonoBehaviour
 
         if (health <= 0f)
         {
-            //Debug.Log($"{gameObject.name} a ars complet");
+            Debug.Log($"{gameObject.name} a ars complet");
             health = 0f;
             Extinguish(); 
         }
 
-        float burnFactor = 1f - (health / 100f); 
+        float burnFactor = 1f - (health / 100f*20); 
         Color burnColor = Color.Lerp(Color.white, Color.black, burnFactor);
 
         if (objectRenderer != null)

@@ -37,10 +37,12 @@ public class FireManager : MonoBehaviour
     {
         numberOfStartedFire=nr;
     }
+
     void RemoveExtinguishedFires()
     {
         burningObjects.RemoveAll(obj => obj == null || !obj.isBurning);
     }
+
     void StartRandomFire()
     {
         GameObject[] flammableObjects = GameObject.FindGameObjectsWithTag(flammableTag);
@@ -97,26 +99,48 @@ public class FireManager : MonoBehaviour
             {
                 Collider[] nearbyObjects = Physics.OverlapSphere(burningObject.transform.position, spreadRadius);
 
+        
                 foreach (var collider in nearbyObjects)
                 {
                     InflamableObject nearbyInflamable = collider.GetComponent<InflamableObject>();
 
                     if (nearbyInflamable != null && !nearbyInflamable.isBurning && !burningObjects.Contains(nearbyInflamable))
                     {
+
+                         Vector3 direction = nearbyInflamable.transform.position - burningObject.transform.position;
+                         float distance = direction.magnitude;
+
+                         // Raycast pentru a verifica obstacolele
+                        RaycastHit hit;
+                          if (Physics.Raycast(burningObject.transform.position, direction, out hit, distance))
+                         {
+                     // Dacă obiectul intersectat conține "wall" în numele său, nu dăm foc acestui obiect
+                            if (hit.collider.gameObject.name.ToLower().Contains("wall"))
+                            {
+                                 Debug.Log($"Obstacol detectat: {hit.collider.gameObject.name}. Nu pot da foc la {nearbyInflamable.gameObject.name}.");
+                                continue;
+                             }
+                             ////partea asta nu sunt sigur ca merge bine mai trebuie testat
+                              Vector3 edgePosition = burningObject.transform.position + direction.normalized * distance;
+                              if (!hit.collider.bounds.Contains(edgePosition))
+                             {
+                                   Debug.Log("Marginea particulelor depășește obiectul/peretele.");
+                                   continue;
+                             }
+                         }
                         float intensity = baseIntensity;
                         float burnRate = 1f;
 
                         if (nearbyInflamable.CompareTag(flammableTag))
                         {
                             intensity += extraIntensity;
-                            burnRate = 1.5f;
+                            burnRate = 1f;
                         }
                         else
                         {
-                            intensity *= 0.5f;
+                            intensity *= 0.2f;
                             burnRate = 0.5f;
                         }
-
                         GameObject fireEffect = CreateFireEffect(nearbyInflamable.transform.position, intensity, nearbyInflamable.GetComponent<Renderer>().bounds.size);
                         nearbyInflamable.Ignite(intensity, burnRate, fireEffect);
                         newBurningObjects.Add(nearbyInflamable.gameObject);

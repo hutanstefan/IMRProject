@@ -33,14 +33,23 @@ public class FireEffectProximity : MonoBehaviour
     {
         if (postProcessingVolume == null || player == null)
             return;
-
         GameObject closestFire = FindClosestFire();
         if (closestFire == null)
         {
             //Debug.Log("No fire detected.");
             return;
         }
-
+           RaycastHit hit;
+        Vector3 directionToFire1 = closestFire.transform.position - player.position;
+        if (Physics.Raycast(player.position, directionToFire1, out hit, directionToFire1.magnitude))
+         {
+            if (hit.collider != null && hit.collider.gameObject.name.Contains("Wall"))
+            {
+            Debug.Log("Wall detected between player and fire. Disabling effect.");
+            DisableEffect(); 
+            return; 
+            }
+         }
         float heightDifference = Mathf.Abs(player.position.y - closestFire.transform.position.y);
         if (heightDifference <= maxHeightDifference)
         {

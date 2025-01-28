@@ -24,7 +24,7 @@ namespace SojaExiles
             }
             else
             {
-                Debug.Log($"[{gameObject.name}] Animator detectat: {openandclose.runtimeAnimatorController.name}");
+               // Debug.Log($"[{gameObject.name}] Animator detectat: {openandclose.runtimeAnimatorController.name}");
             }
         }
 
@@ -36,8 +36,8 @@ namespace SojaExiles
                 float dist = Vector3.Distance(Player.position, transform.position);
                 if (dist < 2.3 )
                 {
-					Debug.Log("Distanța între jucător și ușă: " + dist + " | Stare ușă: " + open + " usa " + gameObject.name );
-                    Debug.Log($"[{gameObject.name}] Animator detectat: {openandclose.runtimeAnimatorController.name}");
+					//Debug.Log("Distanța între jucător și ușă: " + dist + " | Stare ușă: " + open + " usa " + gameObject.name );
+                    //Debug.Log($"[{gameObject.name}] Animator detectat: {openandclose.runtimeAnimatorController.name}");
                     if (open == false)
                     {
                         StartCoroutine(opening());
