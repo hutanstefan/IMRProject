@@ -3,6 +3,8 @@ using UnityEngine;
 public class DifficultyManager : MonoBehaviour
 {
     public Earthquake earthquake; // Referință la scriptul Earthquake
+    public CameraShake cameraShake; // Referință la scriptul CameraShake
+    public ScoreEarthquake scoreEarthquake; // Referință la scriptul ScoreEarthquake
     private string difficulty;
 
     void Awake()
@@ -47,6 +49,8 @@ public class DifficultyManager : MonoBehaviour
     {
         earthquake.intensity = 0.5f;
         earthquake.duration = 15f;
+        cameraShake.shakeDuration = 15f;
+        scoreEarthquake.duration = 15f;
         earthquake.shakeInterval = 0.1f;
         earthquake.directionRange = 0.5f;
     }
@@ -54,7 +58,9 @@ public class DifficultyManager : MonoBehaviour
     private void SetMediumSettings()
     {
         earthquake.intensity = 1f;
-        earthquake.duration = 30f;
+        earthquake.duration = 20f;
+        scoreEarthquake.duration = 20f;
+        cameraShake.shakeDuration = 20f;
         earthquake.shakeInterval = 0.05f;
         earthquake.directionRange = 1f;
     }
@@ -63,6 +69,8 @@ public class DifficultyManager : MonoBehaviour
     {
         earthquake.intensity = 2f;
         earthquake.duration = 45f;
+        scoreEarthquake.duration = 45f;
+        cameraShake.shakeDuration = 45f;
         earthquake.shakeInterval = 0.02f;
         earthquake.directionRange = 2f;
     }
