@@ -5,9 +5,11 @@ using UnityEngine;
 public class Earthquake : MonoBehaviour
 {
     public CeilingParticles ceilingParticles;
-    public float intensity = 5f; // Intensitatea cutremurului
+    public float intensity = 20f; // Intensitatea cutremurului
     public float duration = 30f; // Durata cutremurului în secunde
     public float startDelay = 5f; // Întârzierea de pornire în secunde
+    public float shakeInterval = 0.1f; // Cât de des se schimbă direcția cutremurului
+    public float directionRange = 3f;
 
     private bool isShaking = false;
     private float shakeTimer;
@@ -19,10 +21,12 @@ public class Earthquake : MonoBehaviour
 
     void Update()
     {
-        if(isShaking)
+        if (isShaking)
         {
             ceilingParticles.StartParticles();
-        } else {
+        }
+        else
+        {
             ceilingParticles.StopParticles();
         }
     }
@@ -37,26 +41,25 @@ public class Earthquake : MonoBehaviour
     {
         isShaking = true;
         shakeTimer = duration;
-
-        // Luăm toate obiectele din scenă cu Rigidbody
         Rigidbody[] rigidbodies = FindObjectsOfType<Rigidbody>();
 
         while (shakeTimer > 0)
         {
+            // Generăm o direcție globală aleatoare o singură dată per iterație
+            Vector3 shakeDirection = new Vector3(
+                Random.Range(-directionRange, directionRange), // Direcție pe X
+                0,                     // Fără mișcare pe Y
+                Random.Range(-directionRange, directionRange)  // Direcție pe Z
+            ).normalized * intensity;
+
+            // Aplicăm forța tuturor obiectelor în aceeași direcție
             foreach (var rb in rigidbodies)
             {
-                // Aplicăm o forță aleatoare doar pe axele X și Z
-                Vector3 randomForce = new Vector3(
-                    Random.Range(-intensity, intensity), // Mișcare pe X
-                    0,                                  // Fără mișcare pe Y
-                    Random.Range(-intensity, intensity) // Mișcare pe Z
-                );
-
-                rb.AddForce(randomForce, ForceMode.Impulse);
+                rb.AddForce(shakeDirection, ForceMode.Impulse);
             }
 
-            shakeTimer -= Time.deltaTime;
-            yield return null; // Așteptăm până la următorul frame
+            shakeTimer -= shakeInterval;
+            yield return new WaitForSeconds(shakeInterval); // Așteptăm înainte de a schimba direcția
         }
 
         isShaking = false;

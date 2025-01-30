@@ -11,7 +11,7 @@ public class AddRigidbodiesInCollider : MonoBehaviour
     private bool hasBeenApplied = false;
     public float startDelay = 5f; // Întârzierea de pornire în secunde
     // Lista cuvintele cheie pentru obiectele statice
-    private string[] staticKeywords = { "counter", "cabinet", "drawer", "building", "wall", "floor", "ceiling", "pillar", "door", "window", "roof" ,"xr", "manager", "glassmodel", "colliderapartament", "ceilingparticles"};
+    private string[] staticKeywords = { "counter", "cabinet", "drawer", "building", "wall", "floor", "ceiling", "pillar", "door", "window", "roof" ,"xr", "manager", "glassmodel", "colliderapartament", "ceilingparticles" , "computer", "mirrorplate"};
     private string[] separators = {"_", ",", ".", "-", " "};
 
     void Start()
