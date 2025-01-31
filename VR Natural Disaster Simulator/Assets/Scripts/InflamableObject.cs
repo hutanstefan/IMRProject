@@ -7,12 +7,12 @@ public class InflamableObject : MonoBehaviour
     public float burnRate=0f;  
     public GameObject fireEffectPrefab; 
     private GameObject fireEffectInstance;
-     public float health = 100f;
+     public float health = 1000f;
      private Rigidbody rb; 
      private Renderer objectRenderer;     
     private Material objectMaterial;
     private float lastReductionTime;
-    private float regenerationDelay = 2f; // 2 seconds delay for regeneration
+    private float regenerationDelay = 2f;
 
 
     void Start()

@@ -83,6 +83,7 @@ public class FireManager : MonoBehaviour
 
             if (inflamableComponent != null)
             {
+                
                 GameObject fireEffect = CreateFireEffect(inflamableComponent.transform.position, baseIntensity, inflamableComponent.GetComponent<Renderer>().bounds.size);
                 inflamableComponent.Ignite(baseIntensity, 3f, fireEffect);
                 burningObjects.Add(inflamableComponent);
@@ -131,20 +132,19 @@ public class FireManager : MonoBehaviour
                         Vector3 direction = nearbyInflamable.transform.position - burningObject.transform.position;
                         float distance = direction.magnitude;
     
-                        // Raycast to check for obstacles
                         RaycastHit hit;
                         if (Physics.Raycast(burningObject.transform.position, direction, out hit, distance))
                         {
                             if (hit.collider.gameObject.name.ToLower().Contains("wall"))
                             {
-                                Debug.Log($"Obstacle detected: {hit.collider.gameObject.name}. Cannot ignite {nearbyInflamable.gameObject.name}.");
+                               // Debug.Log($"Obstacle detected: {hit.collider.gameObject.name}. Cannot ignite {nearbyInflamable.gameObject.name}.");
                                 continue;
                             }
     
                             Vector3 edgePosition = burningObject.transform.position + direction.normalized * distance;
                             if (!hit.collider.bounds.Contains(edgePosition))
                             {
-                                Debug.Log("Edge of particles exceeds the object/wall.");
+                               // Debug.Log("Edge of particles exceeds the object/wall.");
                                 continue;
                             }
                         }
@@ -190,11 +190,9 @@ public class FireManager : MonoBehaviour
         ParticleSystem.MainModule main = fireParticleSystem.main;
         ParticleSystem.ShapeModule shape = fireParticleSystem.shape;
 
-        // Adjust the start size and lifetime based on the intensity and object size
         main.startSize = Mathf.Max(0.2f, Mathf.Min(objectSize.y, 2 * objectSize.x));
         main.startLifetime = Mathf.Lerp(1f, 2f, intensity / 10f);
 
-        // Ensure the fire effect always faces upwards
         fireEffect.transform.rotation = Quaternion.Euler(-90, 0, 0);
 
         fireParticleSystem.Play();

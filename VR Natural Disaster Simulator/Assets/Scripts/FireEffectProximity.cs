@@ -45,7 +45,7 @@ public class FireEffectProximity : MonoBehaviour
          {
             if (hit.collider != null && hit.collider.gameObject.name.Contains("Wall"))
             {
-            Debug.Log("Wall detected between player and fire. Disabling effect.");
+            //Debug.Log("Wall detected between player and fire. Disabling effect.");
             DisableEffect(); 
             return; 
             }
