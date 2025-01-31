@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections.Generic;
+using System.Collections;
 
 public class FireManager : MonoBehaviour
 {
@@ -16,9 +17,17 @@ public class FireManager : MonoBehaviour
     public bool firstFireStarted=false;
 
     private List<InflamableObject> burningObjects = new List<InflamableObject>(); 
-
+    private Coroutine alarmCoroutine;
     void Start()
     {
+        if (fireAlarmAudioSource == null)
+        {
+            Debug.LogError("Fire alarm audio source is not assigned.");
+        }
+        else
+        {
+            fireAlarmAudioSource.loop = false;
+        }
         Invoke(nameof(StartRandomFire), initialIgnitionDelay);
     }
 
@@ -41,6 +50,16 @@ public class FireManager : MonoBehaviour
     void RemoveExtinguishedFires()
     {
         burningObjects.RemoveAll(obj => obj == null || !obj.isBurning);
+
+        if (burningObjects.Count == 0 && fireAlarmAudioSource.isPlaying)
+        {
+            if (alarmCoroutine != null)
+            {
+                StopCoroutine(alarmCoroutine);
+            }
+            Debug.Log("All fires extinguished. Stopping alarm.");
+            fireAlarmAudioSource.Stop();
+        }
     }
 
     void StartRandomFire()
@@ -73,7 +92,11 @@ public class FireManager : MonoBehaviour
                 if (!firstFireStarted)
                 {
                     firstFireStarted = true;
-                    fireAlarmAudioSource.Play();
+                    if (alarmCoroutine != null)
+                    {
+                        StopCoroutine(alarmCoroutine);
+                    }
+                    alarmCoroutine = StartCoroutine(StartAlarmWithDelay(3f));
                 }
             }
             else
@@ -92,45 +115,43 @@ public class FireManager : MonoBehaviour
             return;
         lastSpreadTime = Time.time;
         List<GameObject> newBurningObjects = new List<GameObject>();
-
+    
         foreach (var burningObject in burningObjects)
         {
             if (burningObject != null)
             {
                 Collider[] nearbyObjects = Physics.OverlapSphere(burningObject.transform.position, spreadRadius);
-
-        
+    
                 foreach (var collider in nearbyObjects)
                 {
                     InflamableObject nearbyInflamable = collider.GetComponent<InflamableObject>();
-
+    
                     if (nearbyInflamable != null && !nearbyInflamable.isBurning && !burningObjects.Contains(nearbyInflamable))
                     {
-
-                         Vector3 direction = nearbyInflamable.transform.position - burningObject.transform.position;
-                         float distance = direction.magnitude;
-
-                         // Raycast pentru a verifica obstacolele
+                        Vector3 direction = nearbyInflamable.transform.position - burningObject.transform.position;
+                        float distance = direction.magnitude;
+    
+                        // Raycast to check for obstacles
                         RaycastHit hit;
-                          if (Physics.Raycast(burningObject.transform.position, direction, out hit, distance))
-                         {
-                     // Dacă obiectul intersectat conține "wall" în numele său, nu dăm foc acestui obiect
+                        if (Physics.Raycast(burningObject.transform.position, direction, out hit, distance))
+                        {
                             if (hit.collider.gameObject.name.ToLower().Contains("wall"))
                             {
-                                 Debug.Log($"Obstacol detectat: {hit.collider.gameObject.name}. Nu pot da foc la {nearbyInflamable.gameObject.name}.");
+                                Debug.Log($"Obstacle detected: {hit.collider.gameObject.name}. Cannot ignite {nearbyInflamable.gameObject.name}.");
                                 continue;
-                             }
-                             ////partea asta nu sunt sigur ca merge bine mai trebuie testat
-                              Vector3 edgePosition = burningObject.transform.position + direction.normalized * distance;
-                              if (!hit.collider.bounds.Contains(edgePosition))
-                             {
-                                   Debug.Log("Marginea particulelor depășește obiectul/peretele.");
-                                   continue;
-                             }
-                         }
+                            }
+    
+                            Vector3 edgePosition = burningObject.transform.position + direction.normalized * distance;
+                            if (!hit.collider.bounds.Contains(edgePosition))
+                            {
+                                Debug.Log("Edge of particles exceeds the object/wall.");
+                                continue;
+                            }
+                        }
+    
                         float intensity = baseIntensity;
                         float burnRate = 1f;
-
+    
                         if (nearbyInflamable.CompareTag(flammableTag))
                         {
                             intensity += extraIntensity;
@@ -141,6 +162,7 @@ public class FireManager : MonoBehaviour
                             intensity *= 0.2f;
                             burnRate = 0.5f;
                         }
+    
                         GameObject fireEffect = CreateFireEffect(nearbyInflamable.transform.position, intensity, nearbyInflamable.GetComponent<Renderer>().bounds.size);
                         nearbyInflamable.Ignite(intensity, burnRate, fireEffect);
                         newBurningObjects.Add(nearbyInflamable.gameObject);
@@ -148,7 +170,7 @@ public class FireManager : MonoBehaviour
                 }
             }
         }
-
+    
         foreach (var newObject in newBurningObjects)
         {
             var inflamableComponent = newObject.GetComponent<InflamableObject>();
@@ -160,23 +182,30 @@ public class FireManager : MonoBehaviour
     }
 
 
-private GameObject CreateFireEffect(Vector3 position, float intensity, Vector3 objectSize)
-{
-    GameObject fireEffect = Instantiate(fireEffectPrefab, position, Quaternion.identity);
+    private GameObject CreateFireEffect(Vector3 position, float intensity, Vector3 objectSize)
+    {
+        GameObject fireEffect = Instantiate(fireEffectPrefab, position, Quaternion.identity);
 
-    ParticleSystem fireParticleSystem = fireEffect.GetComponent<ParticleSystem>();
-    ParticleSystem.MainModule main = fireParticleSystem.main;
-    ParticleSystem.ShapeModule shape = fireParticleSystem.shape;
+        ParticleSystem fireParticleSystem = fireEffect.GetComponent<ParticleSystem>();
+        ParticleSystem.MainModule main = fireParticleSystem.main;
+        ParticleSystem.ShapeModule shape = fireParticleSystem.shape;
 
-    // Adjust the start size and lifetime based on the intensity and object size
-    main.startSize = Mathf.Max(0.2f, Mathf.Min(objectSize.y, 2 * objectSize.x));
-    main.startLifetime = Mathf.Lerp(1f, 2f, intensity / 10f);
+        // Adjust the start size and lifetime based on the intensity and object size
+        main.startSize = Mathf.Max(0.2f, Mathf.Min(objectSize.y, 2 * objectSize.x));
+        main.startLifetime = Mathf.Lerp(1f, 2f, intensity / 10f);
 
-    // Ensure the fire effect always faces upwards
-    fireEffect.transform.rotation = Quaternion.Euler(-90, 0, 0);
+        // Ensure the fire effect always faces upwards
+        fireEffect.transform.rotation = Quaternion.Euler(-90, 0, 0);
 
-    fireParticleSystem.Play();
+        fireParticleSystem.Play();
 
-    return fireEffect;
-}
+        return fireEffect;
+    }
+    private IEnumerator StartAlarmWithDelay(float delay)
+    {
+        yield return new WaitForSeconds(delay);
+        fireAlarmAudioSource.Play();
+    }
+
+    
 }

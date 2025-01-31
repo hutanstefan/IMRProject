@@ -22,6 +22,7 @@ public class FireExtinguisher : MonoBehaviour
         {
             Debug.LogError("XRGrabInteractable component is missing!");
         }
+        
     }
 
     private void OnEnable()
@@ -46,33 +47,38 @@ public class FireExtinguisher : MonoBehaviour
 
     private void Update()
     {
-        // Check if the object is held and the button is pressed
         if (isHeld && activateParticlesAction.action.IsPressed())
         {
             if (!particleSystem.isPlaying)
                 particleSystem.Play();
 
-            // Launch a ray to detect burning flammable objects
-            Ray ray = new Ray(particleSystem.transform.position, particleSystem.transform.forward);
-            RaycastHit hit;
+            Vector3 origin = particleSystem.transform.position;
+            Vector3 forward = particleSystem.transform.forward;
+            float coneAngle = 30f; // Angle of the cone in degrees
+            float radius = rayDistance * Mathf.Tan(coneAngle * Mathf.Deg2Rad);
 
-            if (Physics.Raycast(ray, out hit, rayDistance))
-            {
-                InflamableObject inflamableObject = hit.collider.GetComponent<InflamableObject>();
+            Collider[] hits = Physics.OverlapSphere(origin, radius);
 
-                if (inflamableObject != null && inflamableObject.isBurning)
-                {
-                    inflamableObject.ReduceFireIntensity(extinguishRate * Time.deltaTime);
-                    Debug.Log($"{hit.collider.gameObject.name} fire extinguished!");
-                }
-                else
-                {
-                    //Debug.Log("No burning object detected.");
-                }
-            }
-            else
+            foreach (Collider hit in hits)
             {
-                //Debug.Log("No object detected.");
+                Vector3 directionToHit = hit.transform.position - origin;
+                float angleToHit = Vector3.Angle(forward, directionToHit);
+
+                if (angleToHit <= coneAngle)
+                {
+                    Ray ray = new Ray(origin, directionToHit);
+                    RaycastHit[] raycastHits = Physics.RaycastAll(ray, rayDistance);
+
+                    foreach (RaycastHit raycastHit in raycastHits)
+                    {
+                        InflamableObject inflamableObject = raycastHit.collider.GetComponent<InflamableObject>();
+
+                        if (inflamableObject != null && inflamableObject.isBurning)
+                        {
+                            inflamableObject.ReduceFireIntensity(extinguishRate * 0.1f * Time.deltaTime); // Reduce intensity slower
+                        }
+                    }
+                }
             }
         }
         else

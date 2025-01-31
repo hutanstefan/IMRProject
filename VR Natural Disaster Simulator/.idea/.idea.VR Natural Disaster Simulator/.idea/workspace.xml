@@ -5,22 +5,13 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="b5856011-ad31-4304-b03a-e5eb62ce7e79" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/.idea.VR Natural Disaster Simulator/.idea/projectSettingsUpdater.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.VR Natural Disaster Simulator/.idea/projectSettingsUpdater.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/.idea.VR Natural Disaster Simulator/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.VR Natural Disaster Simulator/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assembly-CSharp.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/Assembly-CSharp.csproj" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/FireEffect 1.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/FireEffect 1.prefab" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Materials/FlameParticle1_I.mat" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Materials/FlameParticle1_I.mat" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scenes/TemporaryFireScene.unity" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scenes/TemporaryFireScene.unity" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Scripts/FireExtinguisher.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/FireExtinguisher.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Scripts/FireManager.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/FireManager.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/InflamableObject.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/InflamableObject.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ProjectSettings/TagManager.asset" beforeDir="false" afterPath="$PROJECT_DIR$/ProjectSettings/TagManager.asset" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Unity.XR.Interaction.Toolkit.Samples.DeviceSimulator.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/Unity.XR.Interaction.Toolkit.Samples.DeviceSimulator.csproj" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Unity.XR.Interaction.Toolkit.Samples.StarterAssets.Editor.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/Unity.XR.Interaction.Toolkit.Samples.StarterAssets.Editor.csproj" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Unity.XR.Interaction.Toolkit.Samples.StarterAssets.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/Unity.XR.Interaction.Toolkit.Samples.StarterAssets.csproj" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/UserSettings/EditorUserSettings.asset" beforeDir="false" afterPath="$PROJECT_DIR$/UserSettings/EditorUserSettings.asset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/UserSettings/Layouts/CurrentMaximizeLayout.dwlt" beforeDir="false" afterPath="$PROJECT_DIR$/UserSettings/Layouts/CurrentMaximizeLayout.dwlt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/UserSettings/Layouts/default-2022.dwlt" beforeDir="false" afterPath="$PROJECT_DIR$/UserSettings/Layouts/default-2022.dwlt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/VR Natural Disaster Simulator.sln" beforeDir="false" afterPath="$PROJECT_DIR$/VR Natural Disaster Simulator.sln" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -123,6 +114,7 @@
       <workItem from="1737557028184" duration="8373000" />
       <workItem from="1737653951215" duration="9422000" />
       <workItem from="1737734923220" duration="8774000" />
+      <workItem from="1738319820129" duration="6070000" />
     </task>
     <servers />
   </component>
