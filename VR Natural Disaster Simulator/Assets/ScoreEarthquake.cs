@@ -3,119 +3,99 @@ using UnityEngine;
 
 public class ScoreEarthquake : MonoBehaviour
 {
-    public Transform player; // Referință la player
-    public float checkRadius = 4.0f; // Raza de verificare
-    public float duration = 30f; // Durata cutremurului
-    public float delay = 5f; // Timpul de așteptare înainte de a începe verificarea
-    private int score = 0; // Punctajul
-    private bool isNearDeangerousPlace = false; // Dacă player-ul este aproape de un obiect periculos
+    public Transform player; // Reference to player
+    public GameObject scoreBoard; // Reference to scoreboard
+    public float checkRadius = 4.0f; // Check radius
+    public float duration = 30f; // Duration of the earthquake
+    public float delay = 5f; // Delay before starting the check
+    private int score = 0; // Overall score
 
     void Start()
     {
-        // Începe verificarea după perioada de timp setată
+        // Start checking after the specified delay
+        scoreBoard.SetActive(false);
         StartCoroutine(StartEarthquakeCheck());
     }
 
-    // Coroutine pentru a începe verificarea după un anumit timp
+    // Coroutine to start checking after a delay
     IEnumerator StartEarthquakeCheck()
     {
-        yield return new WaitForSeconds(delay); // Așteaptă 5 secunde înainte de a începe verificarea
-    
-        // Verificăm cât timp durează cutremurul
-        float timeSpentNearDoorFrame = 0f; // Timpul petrecut aproape de DoorFrame
-        bool isNearDoorFrame = false;
+        yield return new WaitForSeconds(delay); // Wait for the delay
 
-        while (timeSpentNearDoorFrame < duration)
+        float safeTimeSpent = 0f; // Time spent near safe spots
+        float unsafeTimeSpent = 0f; // Time spent near unsafe spots
+
+        while (safeTimeSpent + unsafeTimeSpent < duration)
         {
-            // Căutăm obiectele care au "DoorFrame" în nume
             GameObject[] allObjects = GameObject.FindObjectsOfType<GameObject>();
+            bool isNearSafeSpot = false;
+            bool isNearUnsafeSpot = false;
 
             foreach (GameObject obj in allObjects)
             {
-                if (obj.name.ToLower().Contains("doorframe") || obj.name.ToLower().Contains("table_dining"))
+                Vector3 playerPos = player.position;
+                Vector3 objPos = obj.transform.position;
+
+                // Check if the player is near the object
+                bool isWithinX = Mathf.Abs(playerPos.x - objPos.x) <= checkRadius;
+                bool isWithinY = Mathf.Abs(playerPos.y - objPos.y) <= checkRadius + 3f;
+                bool isWithinZ = Mathf.Abs(playerPos.z - objPos.z) <= checkRadius;
+
+                if (isWithinX && isWithinY && isWithinZ)
                 {
-                    Vector3 playerPos = player.position;
-                    Vector3 doorPos = obj.transform.position;
-
-                    // Verificăm dacă player-ul este în raza permisă pe fiecare axă
-                    bool isWithinX = Mathf.Abs(playerPos.x - doorPos.x) <= checkRadius;
-                    bool isWithinY = Mathf.Abs(playerPos.y - doorPos.y) <= checkRadius + 3f;
-                    bool isWithinZ = Mathf.Abs(playerPos.z - doorPos.z) <= checkRadius;
-
-                    if (isWithinX && isWithinY && isWithinZ)
+                    if (obj.name.ToLower().Contains("doorframe") || obj.name.ToLower().Contains("table_dining"))
                     {
-                        Debug.Log("Player-ul este aproape de o zona safe!");
-                        isNearDoorFrame = true;
-                        break;
+                        Debug.Log("Player is near a safe spot!");
+                        isNearSafeSpot = true;
                     }
-                }
-
-                if (obj.name.ToLower().Contains("window_frame") || obj.name.ToLower().Contains("staircase"))
-                {
-                    Vector3 playerPos = player.position;
-                    Vector3 doorPos = obj.transform.position;
-
-                    // Verificăm dacă player-ul este în raza permisă pe fiecare axă
-                    bool isWithinX = Mathf.Abs(playerPos.x - doorPos.x) <= checkRadius;
-                    bool isWithinY = Mathf.Abs(playerPos.y - doorPos.y) <= checkRadius + 3f;
-                    bool isWithinZ = Mathf.Abs(playerPos.z - doorPos.z) <= checkRadius;
-
-                    if (isWithinX && isWithinY && isWithinZ)
+                    else if (obj.name.ToLower().Contains("window_frame") || obj.name.ToLower().Contains("staircase"))
                     {
-                        Debug.Log("Player-ul este aproape de un obiect periculos!");
-                        isNearDoorFrame = false;
-                        isNearDeangerousPlace = true;
-                        break;
+                        Debug.Log("Player is near an unsafe spot!");
+                        isNearUnsafeSpot = true;
                     }
                 }
             }
 
-            // Dacă player-ul a stat lângă DoorFrame, crește timpul petrecut
-            if (isNearDoorFrame)
+            if (isNearSafeSpot)
             {
-                timeSpentNearDoorFrame += Time.deltaTime; // Crește timpul cu timpul trecut în acest frame  
+                safeTimeSpent += Time.deltaTime;
             }
 
-            // Dacă player-ul nu este aproape de DoorFrame, resetăm timpul
-            else
+            if (isNearUnsafeSpot)
             {
-                timeSpentNearDoorFrame = 0f;
+                unsafeTimeSpent += Time.deltaTime;
             }
 
-            yield return null; // Așteaptă până la următorul frame
+            yield return null; // Wait for the next frame
         }
 
-        // La final, calculăm scorul (îți ofer un exemplu simplu de scor)
-        CalculateScore(timeSpentNearDoorFrame);
-        wasNearDeangerousPlace();
+        CalculateScore(safeTimeSpent, unsafeTimeSpent);
     }
 
-    // Calcularea scorului pe baza timpului petrecut lângă DoorFrame
-    // Calcularea scorului pe baza timpului petrecut lângă DoorFrame
-    private void CalculateScore(float timeSpent)
+    // Calculate the overall score based on time spent near safe and unsafe spots
+    private void CalculateScore(float safeTime, float unsafeTime)
     {
-        // Evităm împărțirea la zero (în caz că durata e 0 dintr-o eroare)
         if (duration <= 0)
         {
-            Debug.LogError("Durata cutremurului este 0! Nu se poate calcula scorul.");
+            Debug.LogError("Earthquake duration is 0! Cannot calculate score.");
             return;
         }
 
-        // Scorul este procentajul de timp petrecut sub cadrul ușii
-        float scorePercentage = (timeSpent / duration) * 100f;
+        // Score based on safe and unsafe times
+        float safeScore = (safeTime / duration) * 100f;
+        float unsafeScore = (unsafeTime / duration) * 100f;
 
-        // Rotunjim scorul la un număr întreg
-        score = Mathf.FloorToInt(scorePercentage);
+        // Adjust overall score
+        score = Mathf.FloorToInt(safeScore - unsafeScore);
 
-        Debug.Log($"Scorul obținut: {score}");
+        Debug.Log($"Final Score: {score}\nSafe Spot Time: {safeTime}s\nUnsafe Spot Time: {unsafeTime}s");
+
+        ShowScoreboard(safeTime, unsafeTime);
     }
 
-    private void wasNearDeangerousPlace()
+    private void ShowScoreboard(float safeTime, float unsafeTime)
     {
-        if (isNearDeangerousPlace)
-        {
-            Debug.Log("Player-ul a fost aproape de un obiect periculos!");
-        }
+        scoreBoard.SetActive(true);
+        scoreBoard.GetComponent<EarthquakeStats>().UpdateText(safeTime, unsafeTime, score);
     }
-
 }

@@ -6,7 +6,7 @@ public class CameraShake : MonoBehaviour
     public float delay = 5.0f; // Delay-ul de pornire a cutremurului (5 secunde)
     public float shakeDuration = 5.0f;  // Durata cutremurului la apăsarea Enter (5 secunde)
     public float shakeMagnitude = 0.1f; // Puterea cutremurului
-    public Camera cameraToShake; // Camera pe care să o miște
+    public Transform cameraToShake; // Camera pe care să o miște
     public AudioClip shakeSound; // Sunetul cutremurului
 
     private Vector3 initialPosition;
@@ -18,7 +18,7 @@ public class CameraShake : MonoBehaviour
     {
         if (cameraToShake == null)
         {
-            cameraToShake = GetComponent<Camera>();
+            cameraToShake = GetComponent<Transform>();
         }
 
         if (cameraToShake != null)
@@ -59,6 +59,7 @@ public class CameraShake : MonoBehaviour
         shakeDuration = duration;
         shakeMagnitude = magnitude;
         shakeTimeRemaining = shakeDuration;
+        audioSource.loop = true;
         audioSource.Play(); // Play the shake sound
     }
 }
