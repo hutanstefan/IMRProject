@@ -8,6 +8,7 @@ public class ScoreEarthquake : MonoBehaviour
     public float duration = 30f; // Durata cutremurului
     public float delay = 5f; // Timpul de așteptare înainte de a începe verificarea
     private int score = 0; // Punctajul
+    private bool isNearDeangerousPlace = false; // Dacă player-ul este aproape de un obiect periculos
 
     void Start()
     {
@@ -31,7 +32,7 @@ public class ScoreEarthquake : MonoBehaviour
 
             foreach (GameObject obj in allObjects)
             {
-                if (obj.name.ToLower().Contains("doorframe"))
+                if (obj.name.ToLower().Contains("doorframe") || obj.name.ToLower().Contains("table_dining"))
                 {
                     Vector3 playerPos = player.position;
                     Vector3 doorPos = obj.transform.position;
@@ -43,8 +44,27 @@ public class ScoreEarthquake : MonoBehaviour
 
                     if (isWithinX && isWithinY && isWithinZ)
                     {
-                        Debug.Log("Player-ul este aproape de un DoorFrame!");
+                        Debug.Log("Player-ul este aproape de o zona safe!");
                         isNearDoorFrame = true;
+                        break;
+                    }
+                }
+
+                if (obj.name.ToLower().Contains("window_frame") || obj.name.ToLower().Contains("staircase"))
+                {
+                    Vector3 playerPos = player.position;
+                    Vector3 doorPos = obj.transform.position;
+
+                    // Verificăm dacă player-ul este în raza permisă pe fiecare axă
+                    bool isWithinX = Mathf.Abs(playerPos.x - doorPos.x) <= checkRadius;
+                    bool isWithinY = Mathf.Abs(playerPos.y - doorPos.y) <= checkRadius + 3f;
+                    bool isWithinZ = Mathf.Abs(playerPos.z - doorPos.z) <= checkRadius;
+
+                    if (isWithinX && isWithinY && isWithinZ)
+                    {
+                        Debug.Log("Player-ul este aproape de un obiect periculos!");
+                        isNearDoorFrame = false;
+                        isNearDeangerousPlace = true;
                         break;
                     }
                 }
@@ -67,6 +87,7 @@ public class ScoreEarthquake : MonoBehaviour
 
         // La final, calculăm scorul (îți ofer un exemplu simplu de scor)
         CalculateScore(timeSpentNearDoorFrame);
+        wasNearDeangerousPlace();
     }
 
     // Calcularea scorului pe baza timpului petrecut lângă DoorFrame
@@ -87,6 +108,14 @@ public class ScoreEarthquake : MonoBehaviour
         score = Mathf.FloorToInt(scorePercentage);
 
         Debug.Log($"Scorul obținut: {score}");
+    }
+
+    private void wasNearDeangerousPlace()
+    {
+        if (isNearDeangerousPlace)
+        {
+            Debug.Log("Player-ul a fost aproape de un obiect periculos!");
+        }
     }
 
 }
