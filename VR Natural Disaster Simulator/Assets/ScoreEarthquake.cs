@@ -24,12 +24,14 @@ public class ScoreEarthquake : MonoBehaviour
 
         float safeTimeSpent = 0f; // Time spent near safe spots
         float unsafeTimeSpent = 0f; // Time spent near unsafe spots
+        float normalTimeSpent = 0f;
 
-        while (safeTimeSpent + unsafeTimeSpent < duration)
+        while (safeTimeSpent + unsafeTimeSpent + normalTimeSpent < duration)
         {
             GameObject[] allObjects = GameObject.FindObjectsOfType<GameObject>();
             bool isNearSafeSpot = false;
             bool isNearUnsafeSpot = false;
+            bool isNearNothing = false;
 
             foreach (GameObject obj in allObjects)
             {
@@ -53,6 +55,7 @@ public class ScoreEarthquake : MonoBehaviour
                         Debug.Log("Player is near an unsafe spot!");
                         isNearUnsafeSpot = true;
                     }
+                    else isNearNothing = true;
                 }
             }
 
@@ -64,6 +67,11 @@ public class ScoreEarthquake : MonoBehaviour
             if (isNearUnsafeSpot)
             {
                 unsafeTimeSpent += Time.deltaTime;
+            }
+
+            if (isNearNothing)
+            {
+                normalTimeSpent += Time.deltaTime;
             }
 
             yield return null; // Wait for the next frame
